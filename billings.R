@@ -93,7 +93,7 @@ p <- ggplot(res, aes(x=clientName, y=time, fill=clientCategory)) +
     geom_bar(stat="identity") +
     coord_flip(ylim = c(0,max_val + 1)) +
     geom_errorbar(aes(y=goal, ymax=goal, ymin=goal), colour="#FF7F00", width=0.5) +
-    geom_text(aes(y = ifelse(time > max, max, time),
+    geom_text(aes(y = ifelse(time > max_val, max_val, time),
                   ymax=time,
                   label=dur_string,
                   hjust=ifelse(time < 1.25, -.1, 1)
@@ -120,4 +120,4 @@ pdf(paste0(plotfile,".pdf"),  width=9, height=.25*nrow(res), bg = "transparent")
 p
 dev.off()
 
-system(paste0("convert -density 300 -depth 8 -quality 85 '", plotfile, ".pdf' '", plotfile, ".png'"))
+# system(paste0("convert -density 300 -depth 8 -quality 85 '", plotfile, ".pdf' '", plotfile, ".png'"))
