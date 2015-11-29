@@ -21,6 +21,8 @@ if(file.exists(goalfile)){
 
 con <- dbConnect(RSQLite::SQLite(), billingsDBfile)
 
+ctime <- now()
+last_monday <- floor_date(ctime, "day") - days((wday(ctime)+5) %% 7 )
 query <- paste0("
 SELECT TimeSlip._rowid AS slipID,
        TimeSlip.name AS slipName,
@@ -42,7 +44,7 @@ LEFT JOIN TimeEntry ON timeSlipID = TimeSlip._rowid
 LEFT JOIN Project ON TimeSlip.projectID = Project._rowid
 LEFT JOIN Client ON Project.clientID = Client._rowid
 LEFT JOIN ClientCategory ON Client.clientCategoryID = ClientCategory._rowid
-WHERE TimeEntry.startDateTime >= ", as.double(as.POSIXlt("2015-11-23",origin="1970-01-01")),"
+WHERE TimeEntry.startDateTime >= ", as.double(last_monday),"
 ORDER by TimeSlip.startDateTime DESC")
 
 res <- dbGetQuery(con, query) %>%
